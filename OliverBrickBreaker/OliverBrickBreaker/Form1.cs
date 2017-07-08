@@ -18,7 +18,7 @@ namespace OliverBrickBreaker
         }
         Bitmap map;
         Graphics gfx;
-        Ball ball1 = new Ball(3, 425, 250, 20, 6, 6, Brushes.Cyan);
+        Ball ball1 = new Ball(3, 425, 250, 20, 4, 4, Brushes.Cyan);
         Paddle paddle1 = new Paddle(400, 420, 120, 25, 15, Brushes.Red);
         public int score = 0;
         List<Brick> bricks = new List<Brick>();
@@ -42,6 +42,23 @@ namespace OliverBrickBreaker
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                bricks.Add(new Brick(i * 50 + 20, 100, 40, 20, Brushes.Purple));
+                bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, Brushes.Yellow));
+                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, Brushes.Green));
+            }
+            score = 0;
+            ball1.lives = 3;
+            ball1.speedX = 4;
+            ball1.speedY = 4;
+            ball1.x = ClientSize.Width/2;
+            ball1.y = ClientSize.Height/2;
+            label1.Text = " ";
+            button1.Enabled = false;
+        }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -55,7 +72,7 @@ namespace OliverBrickBreaker
                 paddle1.x -= paddle1.speed;
             }
 
-            if(paddle1.x < ClientSize.Width && e.KeyCode == Keys.Right)
+            if(paddle1.x + paddle1.width < ClientSize.Width && e.KeyCode == Keys.Right)
             {
                 paddle1.x += paddle1.speed;
             }
@@ -79,7 +96,7 @@ namespace OliverBrickBreaker
             }
 
 
-            if(paddle1.hitbox.IntersectsWith(ball1.hitbox))
+            if(paddle1.hitbox.IntersectsWith(ball1.hitbox) && ball1.speedY > 0)
             {
                 ball1.speedY *= -1;
             }
@@ -88,17 +105,30 @@ namespace OliverBrickBreaker
             {
                 if (bricks[hit].hitbox.IntersectsWith(ball1.hitbox))
                 {
-                    ball1.speedY *= -1;
+                    ball1.speedY = Math.Abs(ball1.speedY);
                     bricks.RemoveAt(hit);
                     score++;
                     label2.Text = $"Score = {score}";
                 }
             }
 
+            if(ball1.lives > 0 && score == 48)
+            {
+                label1.Text = $"YOU WIN! Final Score: {ball1.lives * score}";
+                ball1.speedX = 0;
+                ball1.speedY = 0;
+                button1.Enabled = true;
+            }
+
             if (ball1.lives == 0)
             {
                 label1.Text = "Game Over";
+                ball1.speedX = 0;
+                ball1.speedY = 0;
+                button1.Enabled = true;
             }
+
+            label3.Text = $"Lives = {ball1.lives}";
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -106,6 +136,40 @@ namespace OliverBrickBreaker
 
         }
 
-      
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ball1.speedX = 6;
+            ball1.speedY = 6;
+            button3.Enabled = false;
+            button3.Visible = false;
+            button2.Enabled = false;
+            button2.Visible = false;
+            button4.Enabled = false;
+            button4.Visible = false;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ball1.speedX = 4;
+            ball1.speedY = 4;
+            button3.Enabled = false;
+            button3.Visible = false;
+            button2.Enabled = false;
+            button2.Visible = false;
+            button4.Enabled = false;
+            button4.Visible = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ball1.speedX = 8;
+            ball1.speedY = 8;
+            button3.Enabled = false;
+            button3.Visible = false;
+            button2.Enabled = false;
+            button2.Visible = false;
+            button4.Enabled = false;
+            button4.Visible = false;
+        }
     }
 }

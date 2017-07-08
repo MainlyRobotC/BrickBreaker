@@ -10,15 +10,15 @@ namespace OliverBrickBreaker
     public class Ball
     {
         public int lives;
-        public int x;
-        public int y;
+        public float x;
+        public float y;
         public int size;
-        public int speedX;
-        public int speedY;
+        public float speedX;
+        public float speedY;
         public Brush brush;
         public Rectangle hitbox
         {
-            get { return new Rectangle(x, y, size, size); }
+            get { return new Rectangle((int)x, (int)y, size, size); }
         }
 
         public Ball(int lives, int x, int y, int size, int speedX, int speedY, Brush brush)
