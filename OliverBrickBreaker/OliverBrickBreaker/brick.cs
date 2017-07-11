@@ -13,18 +13,20 @@ namespace OliverBrickBreaker
         public int y;
         public int width;
         public int height;
+        public int lives;
         public Brush brush;
         public Rectangle hitbox
         {
             get { return new Rectangle(x, y, width, height); }
         }
 
-        public Brick(int x, int y, int width, int height, Brush brush)
+        public Brick(int x, int y, int width, int height, int lives, Brush brush)
         {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+            this.lives = lives;
             this.brush = brush;
         }
 

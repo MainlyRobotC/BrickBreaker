@@ -18,9 +18,12 @@ namespace OliverBrickBreaker
         }
         Bitmap map;
         Graphics gfx;
-        Ball ball1 = new Ball(3, 425, 250, 20, 4, 4, Brushes.Cyan);
+        Ball ball1 = new Ball(3, 425, 250, 20, 0, 0, Brushes.Cyan);
         Paddle paddle1 = new Paddle(400, 420, 120, 25, 15, Brushes.Red);
         public int score = 0;
+
+        bool lost = false;
+
         List<Brick> bricks = new List<Brick>();
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,9 +37,9 @@ namespace OliverBrickBreaker
             
             for(int i = 0; i < 16; i++)
             {
-                bricks.Add(new Brick(i*50+20, 100, 40, 20, Brushes.Purple));
-                bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, Brushes.Yellow));
-                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, Brushes.Green));
+                bricks.Add(new Brick(i*50+20, 100, 40, 20, 1, Brushes.Purple));
+                bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, 2, Brushes.Yellow));
+                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, 3, Brushes.Green));
             }
           
 
@@ -46,9 +49,9 @@ namespace OliverBrickBreaker
         {
             for (int i = 0; i < 16; i++)
             {
-                bricks.Add(new Brick(i * 50 + 20, 100, 40, 20, Brushes.Purple));
-                bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, Brushes.Yellow));
-                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, Brushes.Green));
+                bricks.Add(new Brick(i * 50 + 20, 100, 40, 20, 3, Brushes.Purple));
+                bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, 2, Brushes.Yellow));
+                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, 1, Brushes.Green));
             }
             score = 0;
             ball1.lives = 3;
@@ -75,6 +78,15 @@ namespace OliverBrickBreaker
             if(paddle1.x + paddle1.width < ClientSize.Width && e.KeyCode == Keys.Right)
             {
                 paddle1.x += paddle1.speed;
+            }
+
+            if (lost == true)
+            {
+                if (e.KeyCode == Keys.Space)
+                {
+                    ball1.speedX = 4;
+                    ball1.speedY = 4;   
+                }
             }
         }
         
@@ -106,13 +118,40 @@ namespace OliverBrickBreaker
                 if (bricks[hit].hitbox.IntersectsWith(ball1.hitbox))
                 {
                     ball1.speedY = Math.Abs(ball1.speedY);
-                    bricks.RemoveAt(hit);
-                    score++;
-                    label2.Text = $"Score = {score}";
+                    bricks[hit].lives--;
+                    if(bricks[hit].lives == 1)
+                    {
+                        bricks[hit].brush = Brushes.Green;
+                    }
+                    if (bricks[hit].lives == 2)
+                    {
+                        bricks[hit].brush = Brushes.Yellow;
+                    }
+                    if (bricks[hit].lives == 3)
+                    {
+                        bricks[hit].brush = Brushes.Purple;
+                    }
+                    if (bricks[hit].lives == 0)
+                    {
+                        bricks.RemoveAt(hit);
+                        score++;
+                        label2.Text = $"Score = {score}";
+                    }
+                    
+                }
+
+                if (ball1.y + ball1.size > ClientSize.Height)
+                {
+                    ball1.x = paddle1.x + paddle1.width/2;
+                    ball1.y = paddle1.y;
+                    ball1.speedX = 0;
+                    ball1.speedY = 0;
+                    lost = true;
+                    ball1.lives--;
                 }
             }
-
-            if(ball1.lives > 0 && score == 48)
+            
+            if(ball1.lives > 0 && score >= 48)
             {
                 label1.Text = $"YOU WIN! Final Score: {ball1.lives * score}";
                 ball1.speedX = 0;
@@ -133,6 +172,7 @@ namespace OliverBrickBreaker
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
+            
 
         }
 

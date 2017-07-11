@@ -49,13 +49,7 @@ namespace OliverBrickBreaker
             {
                 speedY *= -1;
             }
-            if(y + size > ClientSize.Height)
-            {
-                x = ClientSize.Width / 2;
-                y = ClientSize.Height / 2;
-
-                lives--;
-            }
+            
         }
 
         public void Draw(Graphics gfx)
