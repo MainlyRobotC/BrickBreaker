@@ -10,22 +10,22 @@ namespace OliverBrickBreaker
     public class Ball
     {
         public int lives;
-        public float x;
-        public float y;
+        public float X;
+        public float Y;
         public int size;
         public float speedX;
         public float speedY;
         public Brush brush;
         public Rectangle hitbox
         {
-            get { return new Rectangle((int)x, (int)y, size, size); }
+            get { return new Rectangle((int)X, (int)Y, size, size); }
         }
 
         public Ball(int lives, int x, int y, int size, int speedX, int speedY, Brush brush)
         {
             this.lives = lives;
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
             this.size = size;
             this.speedX = speedX;
             this.speedY = speedY;
@@ -34,18 +34,14 @@ namespace OliverBrickBreaker
 
         public void Update(Size ClientSize)
         {
-            x += speedX;
-            y += speedY;
+            X += speedX;
+            Y += speedY;
 
-            if(x + size > ClientSize.Width)
+            if(X + size > ClientSize.Width || X < 0)
             {
                 speedX *= -1;
             }
-            if(x < 0)
-            {
-                speedX *= -1;
-            }
-            if(y < 0)
+            if(Y < 0)
             {
                 speedY *= -1;
             }
@@ -54,7 +50,7 @@ namespace OliverBrickBreaker
 
         public void Draw(Graphics gfx)
         {
-            gfx.FillEllipse(brush, x, y, size, size);
+            gfx.FillEllipse(brush, X, Y, size, size);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace OliverBrickBreaker
         Paddle paddle1 = new Paddle(400, 420, 120, 25, 15, Brushes.Red);
         public int score = 0;
 
-        bool lost = false;
+        bool lost = true;
 
         List<Brick> bricks = new List<Brick>();
 
@@ -37,9 +37,9 @@ namespace OliverBrickBreaker
             
             for(int i = 0; i < 16; i++)
             {
-                bricks.Add(new Brick(i*50+20, 100, 40, 20, 1, Brushes.Purple));
+                bricks.Add(new Brick(i*50+20, 100, 40, 20, 3, Brushes.Purple));
                 bricks.Add(new Brick(i * 50 + 20, 150, 40, 20, 2, Brushes.Yellow));
-                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, 3, Brushes.Green));
+                bricks.Add(new Brick(i * 50 + 20, 200, 40, 20, 1, Brushes.Green));
             }
           
 
@@ -57,8 +57,8 @@ namespace OliverBrickBreaker
             ball1.lives = 3;
             ball1.speedX = 4;
             ball1.speedY = 4;
-            ball1.x = ClientSize.Width/2;
-            ball1.y = ClientSize.Height/2;
+            ball1.X = ClientSize.Width/2;
+            ball1.Y = ClientSize.Height/2;
             label1.Text = " ";
             button1.Enabled = false;
         }
@@ -73,19 +73,28 @@ namespace OliverBrickBreaker
             if(paddle1.x > 0 && e.KeyCode == Keys.Left)
             {
                 paddle1.x -= paddle1.speed;
+                if(!lost)
+                {
+                    ball1.X -= paddle1.speed;
+                }
             }
 
             if(paddle1.x + paddle1.width < ClientSize.Width && e.KeyCode == Keys.Right)
             {
                 paddle1.x += paddle1.speed;
+                if (!lost)
+                {
+                    ball1.X += paddle1.speed;
+                }   
             }
 
-            if (lost == true)
+            if (!lost)
             {
                 if (e.KeyCode == Keys.Space)
                 {
                     ball1.speedX = 4;
-                    ball1.speedY = 4;   
+                    ball1.speedY = 4;
+                    lost = true;  
                 }
             }
         }
@@ -137,16 +146,15 @@ namespace OliverBrickBreaker
                         score++;
                         label2.Text = $"Score = {score}";
                     }
-                    
                 }
 
-                if (ball1.y + ball1.size > ClientSize.Height)
+                if (ball1.Y + ball1.size > ClientSize.Height)
                 {
-                    ball1.x = paddle1.x + paddle1.width/2;
-                    ball1.y = paddle1.y;
+                    ball1.X = paddle1.x + paddle1.width/2;
+                    ball1.Y = paddle1.y;
                     ball1.speedX = 0;
                     ball1.speedY = 0;
-                    lost = true;
+                    lost = false;
                     ball1.lives--;
                 }
             }
